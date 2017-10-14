@@ -18,9 +18,22 @@ class Blog(db.Model):
         self.name = name
         self.body = body
 
-@app.route('/', methods=['POST', 'GET'])
-def index():
-    return render_template('newpost.html')
+#@app.route('/blog', methods=['POST', 'GET'])
+#def index():
+    #blogs = Blog.query.all()
+    #return render_template('blog.html', title="My Blog", blogs=blogs)
+
+@app.route('/blog')
+def blog_display(): 
+
+    blogs = Blog.query.all()
+    blog_id = request.args.get('id')
+
+    if blog_id:
+        individual_blog = Blog.query.filter_by(id=blog_id).first()
+        return render_template('individual.html', title="A blog", individual_blog=individual_blog)
+
+    return render_template('blog.html', title="My Blog", blogs=blogs)
 
 @app.route('/newpost',methods=['POST', 'GET'])
 def add_post():
@@ -35,21 +48,11 @@ def add_post():
             new_blog = Blog(blog_name, blog_body)
             db.session.add(new_blog)
             db.session.commit()
-            blogs = Blog.query.all()
-            return redirect('/blog')
+            post_id = str(new_blog.id)
+            return redirect('/blog?id='+ post_id)
 
     return render_template('newpost.html')        
 
-@app.route('/blog', methods=['POST', 'GET'])
-def blog_display():
-
-    #blog_post = Blog.query.filter_by(id=session['id']).first()
-
-    #if request.method == 'POST':
-        #blog_id = int(request.form['blog-id'])
-        #blog = Blog.query.get(blog_id)
-    blogs = Blog.query.all()
-    return render_template('blog.html', title="My Blog", blogs=blogs)
-
+  
 if __name__ == '__main__':
     app.run()
