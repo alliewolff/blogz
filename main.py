@@ -104,7 +104,8 @@ def blog_display():
         blog = Blog.query.get(id)
         name = blog.name
         body = blog.body
-        return render_template('individual.html', name=name, body=body)
+        author = blog.author
+        return render_template('individual.html', name=name, body=body, author=author)
     if request.args.get('user'):
         user_id = request.args.get('user')
         blogs = Blog.query.filter_by(author_id=user_id)

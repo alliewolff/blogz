@@ -3,4 +3,5 @@
 {% block content %}
         <center><h2>{{name}}</h2></center>
         <p>{{body}}</p>
+        <p><em>Written by: <a href="/blog?user={{author.id}}">{{author.username}}</a></em></p>
 {% endblock %}
